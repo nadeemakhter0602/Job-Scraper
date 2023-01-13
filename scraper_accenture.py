@@ -48,13 +48,19 @@ class Scraper(Selenium_Scraper):
             for job in jobs:
                 job_ext_time = job[-1]
                 job_link = job[1]
+                job_title = job[2]
+                job_city = job[5]
+                job_country = job[4]
                 search_query = '''SELECT job_link FROM jobs WHERE job_link="{0}"'''.format(job_link)
                 res = self.cur.execute(search_query)
                 if res.fetchone() is None:
                     print()
                     print('Page :', page_num)
                     print('Time taken for extraction (seconds) :', job_ext_time)
-                    print('Job Posting Link :',job_link)
+                    print('Job Title :', job_title)
+                    print('City :', job_city)
+                    print('Country :', job_country)
+                    print('Job Posting Link :', job_link)
                     print()
                     self.jobs_extracted += 1
                     # add job to sqlite db
@@ -113,12 +119,20 @@ class Scraper(Selenium_Scraper):
             except Exception as err:
                 print()
                 print(str(err))
-                print()
                 logger.exception(str(err))
                 if str(err) == 'No Jobs Found' or str(err) == 'Jobs Limit Reached':
                     break
+                retry = ''
+                if self.retry_period == 1:
+                    retry = 'Retrying in a second....'
+                elif self.retry_period > 1:
+                    retry = 'Retrying in ' + str(self.retry_period) + ' seconds....'
+                else:
+                    retry = 'Retrying....'
+                print(retry)
+                print()
                 # incase of exception, populate logs and try again
-                logger.info(str.format('Retrying in', self.retry_period, 'seconds....'))
+                logger.info(retry)
                 time.sleep(self.retry_period)
         # exit selenium webdriver
         driver.quit()
