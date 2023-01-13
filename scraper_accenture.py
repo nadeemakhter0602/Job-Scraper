@@ -17,7 +17,6 @@ class Scraper(Selenium_Scraper):
         # call init of super class
         Selenium_Scraper.__init__(self)
         self.retry_period = 0
-        self.thread_num = 2
         self.cur = cursor
         # create a table for jobs if does not exist
         create_table_statement = '''CREATE TABLE IF NOT EXISTS jobs(current_datetime, 
