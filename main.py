@@ -41,4 +41,6 @@ while True:
         print()
         print('Quitting....')
         print()
+        # close connection to db
+        conn.close()
         break
