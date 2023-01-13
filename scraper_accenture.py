@@ -21,12 +21,12 @@ class Scraper(Selenium_Scraper):
         self.cur = cursor
         # create a table for jobs if does not exist
         create_table_statement = '''CREATE TABLE IF NOT EXISTS jobs(current_datetime, 
-                                                                              job_link, 
-                                                                              job_title, 
-                                                                              job_description, 
-                                                                              job_location_country, 
-                                                                              job_location_city, 
-                                                                              extraction_time)'''
+                                                                    job_link, 
+                                                                    job_title, 
+                                                                    job_description, 
+                                                                    job_location_country, 
+                                                                    job_location_city, 
+                                                                    extraction_time)'''
         self.cur.execute(create_table_statement)
         self.url = 'https://www.accenture.com/in-en/careers/jobsearch'
         # jobs extracted
