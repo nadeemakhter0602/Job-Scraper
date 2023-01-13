@@ -7,7 +7,7 @@ Currently, it consists of a scraper which scrapes the career pages of accenture'
 The repo consists of :
 
 * main.py : runs the scraper for the site every `polling_period` seconds and stores data about runs in a database
-* scrape.py : consists of `Selenium_Scraper` class which provides a base class for selenium scrapers, has methods for initializing selenium webdriver and logging
+* scrape.py : consists of `Selenium_Scraper` class which provides a base class for selenium scrapers, has methods for initializing selenium webdriver and logging, which is stored in `selenium_scraper.log`.
 * scraper_accenture.py : consists of `Scraper` class which inherits `Selenium_Scraper`, it contains methods for parsing the site html, it extracts the job data for the last 3 days or last 1000 jobs, whichever is smaller.
 
 ### Entity Relationship (ER) Diagram
