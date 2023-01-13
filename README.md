@@ -12,7 +12,7 @@ The repo consists of :
 
 ### Entity Relationship (ER) Diagram
 
-The ER diagram is relatively simple because of not much complexity in the data being extracted.
+The ER diagram is relatively simple because of not much complexity in the data being extracted. The data is stored in a lightweight sqlite3 database called `jobs.db`.
 
 ![](assets/ERD.jpeg)
 
