@@ -9,7 +9,7 @@ class Selenium_Scraper:
         # configure log file
         logging.basicConfig(filename="selenium_scraper.log",
                             format='%(asctime)s %(message)s',
-                            filemode='w')
+                            filemode='a')
         # create log object
         self.logger = logging.getLogger()
         # setting threshold
