@@ -1,4 +1,4 @@
-from scraper_accenture import Scraper
+from scraper_accenture_selenium import Scraper
 import time
 import datetime
 import sqlite3
