@@ -23,3 +23,14 @@ class Selenium_Scraper:
                                                ['enable-logging'])
         driver = webdriver.Chrome(options=chrome_options)
         return driver
+
+class API_Scraper:
+    def __init__(self):
+        # configure log file
+        logging.basicConfig(filename="api_scraper.log",
+                            format='%(asctime)s %(message)s',
+                            filemode='a')
+        # create log object
+        self.logger = logging.getLogger()
+        # setting threshold
+        self.logger.setLevel(logging.INFO)
