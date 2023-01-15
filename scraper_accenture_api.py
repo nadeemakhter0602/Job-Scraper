@@ -5,7 +5,7 @@ import json
 
 class Scraper(API_Scraper):
     def __init__(self):
-        API_Scraper.__init__()
+        API_Scraper.__init__(self)
         self.num_jobs = 100
 
     def set_headers(self):
