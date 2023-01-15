@@ -1,5 +1,5 @@
 __*
 *.log
-*.txt
+p*.txt
 *.db
 *.db-journal
