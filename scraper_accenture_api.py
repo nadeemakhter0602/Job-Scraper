@@ -6,7 +6,7 @@ import json
 class Scraper(API_Scraper):
     def __init__(self):
         API_Scraper.__init__(self)
-        self.num_jobs = 100
+        self.num_jobs = 1
 
     def set_headers(self):
         headers = {
@@ -55,5 +55,16 @@ class Scraper(API_Scraper):
         data = self.set_body(self.num_jobs)
         response = requests.post('https://www.accenture.com/api/accenture/jobsearch/result', headers=headers, data=data)
         data = json.loads(response.content.decode())
+        print("Total number of jobs postings :", data['total'])
+        self.num_jobs = int(data['total'])
+        data = self.set_body(self.num_jobs)
+        response = requests.post('https://www.accenture.com/api/accenture/jobsearch/result', headers=headers, data=data)
+        data = json.loads(response.content.decode())
+        i = 1
         for j in data['documents']:
-            print(j['title'])
+            print(i, "Job Title :", j['title'])
+            i += 1
+
+if __name__ == '__main__':
+    scraper = Scraper()
+    scraper.make_api_request()
