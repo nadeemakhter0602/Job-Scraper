@@ -59,10 +59,10 @@ class Scraper(API_Scraper):
         print("Total number of jobs postings :", data['total'])
         self.num_jobs = data['total']
         data = self.set_body(self.num_jobs)
-        start_time = time().time()
+        start_time = time.time()
         response = requests.post('https://www.accenture.com/api/accenture/jobsearch/result', headers=headers, data=data)
         data = json.loads(response.content.decode())
-        extraction_time = time().time() - start_time
+        extraction_time = time.time() - start_time
         i = 1
         for job in data['documents']:
             current_datetime = time.time()
