@@ -25,6 +25,7 @@ class Scraper(Selenium_Scraper):
                                                                     job_description, 
                                                                     job_location_country, 
                                                                     job_location_city, 
+                                                                    job_date_posted,
                                                                     extraction_time)'''
         self.cur.execute(create_table_statement)
         self.url = 'https://www.accenture.com/in-en/careers/jobsearch'
@@ -64,7 +65,7 @@ class Scraper(Selenium_Scraper):
                     print()
                     self.jobs_extracted += 1
                     # add job to sqlite db
-                    self.cur.execute('INSERT INTO jobs VALUES(?, ?, ?, ?, ?, ?, ?)', job)
+                    self.cur.execute('INSERT INTO jobs VALUES(?, ?, ?, ?, ?, ?, ?, ?)', job)
                     # check if jobs extracted reaches 1000
                     if self.jobs_extracted == 1000:
                         raise Exception('Jobs Limit Reached')
@@ -88,7 +89,7 @@ class Scraper(Selenium_Scraper):
                 job_description = job.find('span', {'class': 'description'}).get_text()
                 job_location_country = job.find('div', {'class' : "cmp-teaser__pretitle cmp-teaser-region"}).get_text()
                 job_location_city = job.find('div', {'class' : 'cmp-teaser__pretitle cmp-teaser-city'}).get_text()
-                current_datetime = datetime.datetime.now()
+                current_datetime = time.time()
                 job_date_posted = job.find('p', {'class' : 'cmp-teaser__job-listing cmp-teaser__job-listing-posted-date'}).get_text()
                 # check if job was posted more than 3 days ago
                 job_date_posted = re.search(r'(\d+) (day|days) ago', job_date_posted)
@@ -101,6 +102,7 @@ class Scraper(Selenium_Scraper):
                         job_description, 
                         job_location_country, 
                         job_location_city,
+                        None,
                         extraction_time)
                 jobs.append(job)
             return jobs
