@@ -5,9 +5,23 @@ import time
 
 
 class Scraper(API_Scraper):
-    def __init__(self):
+
+    def __init__(self, cursor):
         API_Scraper.__init__(self)
         self.num_jobs = 1
+        self.cur = cursor
+        # create a table for jobs if does not exist
+        create_table_statement = '''CREATE TABLE IF NOT EXISTS jobs(current_datetime, 
+                                                                    job_link, 
+                                                                    job_title, 
+                                                                    job_description, 
+                                                                    job_location_country, 
+                                                                    job_location_city, 
+                                                                    job_date_posted,
+                                                                    extraction_time)'''
+        self.cur.execute(create_table_statement)
+        self.url = 'https://www.accenture.com/api/accenture/jobsearch/result'
+        self.jobs_extracted = 0
 
     def set_headers(self):
         headers = {
@@ -18,7 +32,7 @@ class Scraper(API_Scraper):
             "sec-fetch-mode": "cors",
             "sec-fetch-site": "same-origin",
             "sec-gpc": "1",
-            "Referer": "https://www.accenture.com/in-en/careers/jobsearch",
+            "Referer": self.url,
             "Referrer-Policy": "strict-origin-when-cross-origin"
         }
         return headers
@@ -54,16 +68,15 @@ class Scraper(API_Scraper):
     def make_api_request(self):
         headers = self.set_headers()
         data = self.set_body(self.num_jobs)
-        response = requests.post('https://www.accenture.com/api/accenture/jobsearch/result', headers=headers, data=data)
+        response = requests.post(self.url, headers=headers, data=data)
         data = json.loads(response.content.decode())
         print("Total number of jobs postings :", data['total'])
         self.num_jobs = data['total']
         data = self.set_body(self.num_jobs)
         start_time = time.time()
-        response = requests.post('https://www.accenture.com/api/accenture/jobsearch/result', headers=headers, data=data)
+        response = requests.post(self.url, headers=headers, data=data)
         data = json.loads(response.content.decode())
         extraction_time = time.time() - start_time
-        i = 1
         for job in data['documents']:
             current_datetime = time.time()
             job_link = job['jobDetailUrl']
@@ -72,16 +85,25 @@ class Scraper(API_Scraper):
             job_description = job['jobDescription']
             job_country = job['country']
             job_city = job['location'].pop()
-            print()
-            print('Job No.', i)
-            print('Time taken for extraction (seconds) :', extraction_time)
-            print('Job Title :', job_title)
-            print('City :', job_city)
-            print('Country :', job_country)
-            print('Job Posting Link :', job_link)
-            print()
-            i += 1
-
-if __name__ == '__main__':
-    scraper = Scraper()
-    scraper.make_api_request()
+            job = (current_datetime, 
+                    job_link, 
+                    job_title,
+                    job_description, 
+                    job_location_country, 
+                    job_location_city,
+                    job_date_posted,
+                    extraction_time)
+            search_query = '''SELECT job_link FROM jobs WHERE job_link="{0}" AND job_date_posted IS NULL'''.format(job_link)
+            res = self.cur.execute(search_query)
+            if res.fetchone() is None:
+                self.jobs_extracted += 1
+                print()
+                print('Job No.', self.jobs_extracted)
+                print('Time taken for extraction (seconds) :', extraction_time)
+                print('Job Title :', job_title)
+                print('City :', job_city)
+                print('Country :', job_country)
+                print('Job Posting Link :', job_link)
+                print()
+                # add job to sqlite db
+                self.cur.execute('INSERT INTO jobs VALUES(?, ?, ?, ?, ?, ?, ?, ?)', job)
