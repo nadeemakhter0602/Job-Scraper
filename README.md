@@ -18,12 +18,13 @@ The ER diagram is relatively simple because of not much complexity in the data b
 
 `jobs` table stores the job data :
 
-* `current_datetime` : current time stamp the moment a job information is extracted
-* `job_link` : link to the job page
+* `current_datetime` : Current unix timestamp the moment a job information is extracted
+* `job_link` : Link to the job page
 * `job_title` : Title of the position
 * `job_description` : Job description
 * `job_location_country` : Country of job location
 * `job_location_city` : City of job location
+* `job_date_posted` : Unix timestamp of when the job was posted on the site, note that this can be `null`
 * `extraction_time` : Time taken to extract the page containing the job data
 
 `runs` table stores the run status of the scraper during every poll to the site :
