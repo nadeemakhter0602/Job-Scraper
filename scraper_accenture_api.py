@@ -73,7 +73,9 @@ class Scraper(API_Scraper):
             job_country = job['country']
             job_city = job['location'].pop()
             print()
-            print(i, 'Job Title :', job_title)
+            print('Job No.', i)
+            print('Time taken for extraction (seconds) :', extraction_time)
+            print('Job Title :', job_title)
             print('City :', job_city)
             print('Country :', job_country)
             print('Job Posting Link :', job_link)
