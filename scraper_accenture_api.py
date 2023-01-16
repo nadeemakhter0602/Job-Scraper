@@ -1,6 +1,7 @@
 from scraper import API_Scraper
 import requests
 import json
+import time
 
 
 class Scraper(API_Scraper):
@@ -56,13 +57,27 @@ class Scraper(API_Scraper):
         response = requests.post('https://www.accenture.com/api/accenture/jobsearch/result', headers=headers, data=data)
         data = json.loads(response.content.decode())
         print("Total number of jobs postings :", data['total'])
-        self.num_jobs = int(data['total'])
+        self.num_jobs = data['total']
         data = self.set_body(self.num_jobs)
+        start_time = time().time()
         response = requests.post('https://www.accenture.com/api/accenture/jobsearch/result', headers=headers, data=data)
         data = json.loads(response.content.decode())
+        extraction_time = time().time() - start_time
         i = 1
-        for j in data['documents']:
-            print(i, "Job Title :", j['title'])
+        for job in data['documents']:
+            current_datetime = time.time()
+            job_link = job['jobDetailUrl']
+            job_title = job['title']
+            job_date_posted = job['postedDate']
+            job_description = job['jobDescription']
+            job_country = job['country']
+            job_city = job['location'].pop()
+            print()
+            print(i, 'Job Title :', job_title)
+            print('City :', job_city)
+            print('Country :', job_country)
+            print('Job Posting Link :', job_link)
+            print()
             i += 1
 
 if __name__ == '__main__':
