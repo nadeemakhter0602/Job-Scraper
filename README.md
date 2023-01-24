@@ -1,6 +1,6 @@
-# Job Scraper
+# Scraper
 
-Scraper which scrapes job data from sites.
+Scraper which scrapes data from sites.
 
 Currently, it consists of a scraper which scrapes the career pages of accenture's site.
 
